@@ -1,0 +1,215 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Simple Sectioned Essay Template
+% LaTeX Template
+%
+% This template has been downloaded from:
+% http://www.latextemplates.com
+%
+% Note:
+% The \lipsum[#] commands throughout this template generate dummy text
+% to fill the template out. These commands should all be removed when 
+% writing essay content.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[12pt]{article} % Default font size is 12pt, it can be changed here
+
+\usepackage{geometry} % Required to change the page size to A4
+\geometry{a4paper} % Set the page size to be A4 as opposed to the default US Letter
+
+\usepackage{graphicx} % Required for including pictures
+
+\usepackage{float} % Allows putting an [H] in \begin{figure} to specify the exact location of the figure
+\usepackage{wrapfig} % Allows in-line images such as the example fish picture
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+\usepackage{hyperref}
+
+
+\linespread{1.2} % Line spacing
+
+%\setlength\parindent{0pt} % Uncomment to remove all indentation from paragraphs
+
+\graphicspath{{Pictures/}} % Specifies the directory where pictures are stored
+
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+
+\definecolor{Maroon}{rgb}{0.5,0,0}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+
+\lstset{frame=tb,
+	backgroundcolor=\color[rgb]{0.9,0.9,0.9},
+	language=Java,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	% Line numbers
+	xleftmargin={0.75cm},
+	numbers=left,
+	stepnumber=1,
+	firstnumber=1,
+	numberfirstline=true,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
+
+
+\lstdefinelanguage{XML_android}
+{
+	alsoletter=-,
+	basicstyle=\ttfamily\footnotesize,
+	morestring=[b]",
+	moredelim=*[s][\color{Maroon}]{<}{\ },
+	moredelim=[s][\color{Maroon}]{</}{>},
+	moredelim=[l][\color{Maroon}]{/>},
+	moredelim=[l][\color{Maroon}]{>},
+	morecomment=[s]{<?}{?>},
+	morecomment=[s]{<!--}{-->},
+	morecomment=[s]{<!}{>},
+	commentstyle=\color{darkgreen},
+	stringstyle=\color{blue},
+	identifierstyle=\color{red}
+}
+
+
+
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\begin{titlepage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\center % Center everything on the page
+
+\HRule \\[0.4cm]
+{ \huge \bfseries Add a top menu}\\[0.4cm] % Title of your document
+\HRule \\[1.5cm]
+
+\begin{minipage}{0.4\textwidth}
+\end{minipage}\\[4cm]
+
+{\large \today}\\[3cm] % Date, change the \today to a set date if you want to be precise
+
+%\includegraphics{Logo}\\[1cm] % Include a department/university logo - this will require the graphicx package
+
+\vfill % Fill the rest of the page with whitespace
+
+\end{titlepage}
+
+%----------------------------------------------------------------------------------------
+%	TABLE OF CONTENTS
+%----------------------------------------------------------------------------------------
+
+\tableofcontents % Include a table of contents
+
+\newpage % Begins the essay on a new page instead of on the same page as the table of contents 
+
+%----------------------------------------------------------------------------------------
+%	INTRODUCTION
+%----------------------------------------------------------------------------------------
+
+\section{Introduction} % Major section
+
+How to add a top menu in android App.
+
+%------------------------------------------------
+
+\section{Create the files}
+
+\begin{enumerate}
+	\item Create a folder called menu inside res folder.
+	\item Create a new XML file with the name of your menu inside the menu folder.
+\end{enumerate}
+
+\section{Edit your XML}
+In this XML you should create all the items that you need in your menu. 
+Now you can add the id, the order and how it should be showed.
+
+\begin{lstlisting}[%
+language=XML_android,
+caption={main.xml}]
+
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<item
+		android:id="@+id/action_search"
+		android:orderInCategory="1"
+		app:showAsAction="ifRoom"
+		android:title="@string/search"></item>
+
+</menu>
+\end{lstlisting}
+
+\href{https://developer.android.com/guide/topics/resources/menu-resource.html}{Menu Resource}
+
+
+\section{Edit your activity}
+
+\subsection{Add you menu}
+
+\begin{enumerate}
+	\item Override onCreateOptionsMenu.
+	\item Use getMenuInflater().inflate to inflate the menu.
+	\item Return true to display your menu.
+\end{enumerate}
+
+\begin{lstlisting}[language=Java]
+@Override
+public boolean onCreateOptionsMenu(Menu menu) {
+	getMenuInflater().inflate(R.menu.main, menu);
+
+	return true;
+}
+\end{lstlisting}
+
+
+\subsection{Manage the item selected}
+
+\begin{enumerate}
+	\item Override onOptionsItemSelected.
+	\item Get the ID of the item that was selected.
+	\item If you do NOT handle the menu click, return super.onOptionsItemSelected to let Android handle the menu click.
+\end{enumerate}
+
+\begin{lstlisting}[language=Java]
+@Override
+public boolean onOptionsItemSelected(MenuItem item) {
+	int itemID = item.getItemId();
+
+	if(itemID == R.id.action_search){
+		Context context = MainActivity.this;
+		String message = "Search Clicked";
+		Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+	}
+
+	return super.onOptionsItemSelected(item);
+}
+\end{lstlisting}
+
+
+\end{document}
