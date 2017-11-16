@@ -1,0 +1,586 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Simple Sectioned Essay Template
+% LaTeX Template
+%
+% This template has been downloaded from:
+% http://www.latextemplates.com
+%
+% Note:
+% The \lipsum[#] commands throughout this template generate dummy text
+% to fill the template out. These commands should all be removed when 
+% writing essay content.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[12pt]{article} % Default font size is 12pt, it can be changed here
+
+\usepackage{geometry} % Required to change the page size to A4
+\geometry{a4paper} % Set the page size to be A4 as opposed to the default US Letter
+
+\usepackage{graphicx} % Required for including pictures
+
+\usepackage{float} % Allows putting an [H] in \begin{figure} to specify the exact location of the figure
+\usepackage{wrapfig} % Allows in-line images such as the example fish picture
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+\usepackage{hyperref}
+
+
+\linespread{1.2} % Line spacing
+
+%\setlength\parindent{0pt} % Uncomment to remove all indentation from paragraphs
+
+\graphicspath{{Pictures/}} % Specifies the directory where pictures are stored
+
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+
+\definecolor{Maroon}{rgb}{0.5,0,0}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+
+\lstset{frame=tb,
+	backgroundcolor=\color[rgb]{0.9,0.9,0.9},
+	language=Java,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	% Line numbers
+	xleftmargin={0.75cm},
+	numbers=left,
+	stepnumber=1,
+	firstnumber=1,
+	numberfirstline=true,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
+
+
+\lstdefinelanguage{XML_android}
+{
+	alsoletter=-,
+	basicstyle=\ttfamily\footnotesize,
+	morestring=[b]",
+	moredelim=*[s][\color{Maroon}]{<}{\ },
+	moredelim=[s][\color{Maroon}]{</}{>},
+	moredelim=[l][\color{Maroon}]{/>},
+	moredelim=[l][\color{Maroon}]{>},
+	morecomment=[s]{<?}{?>},
+	morecomment=[s]{<!--}{-->},
+	morecomment=[s]{<!}{>},
+	commentstyle=\color{darkgreen},
+	stringstyle=\color{blue},
+	identifierstyle=\color{red}
+}
+
+
+
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\begin{titlepage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\center % Center everything on the page
+
+\HRule \\[0.4cm]
+{ \huge \bfseries Create a RecyclerView}\\[0.4cm] % Title of your document
+\HRule \\[1.5cm]
+
+\begin{minipage}{0.4\textwidth}
+\end{minipage}\\[4cm]
+
+{\large \today}\\[3cm] % Date, change the \today to a set date if you want to be precise
+
+%\includegraphics{Logo}\\[1cm] % Include a department/university logo - this will require the graphicx package
+
+\vfill % Fill the rest of the page with whitespace
+
+\end{titlepage}
+
+%----------------------------------------------------------------------------------------
+%	TABLE OF CONTENTS
+%----------------------------------------------------------------------------------------
+
+\tableofcontents % Include a table of contents
+
+\newpage % Begins the essay on a new page instead of on the same page as the table of contents 
+
+%----------------------------------------------------------------------------------------
+%	INTRODUCTION
+%----------------------------------------------------------------------------------------
+
+\section{Introduction} % Major section
+
+How to create a RecyclerView.
+
+%------------------------------------------------
+
+\section{Add RecyclerView dependency}
+Add RecyclerView dependency to the app grandle:
+
+\begin{lstlisting}[%
+language=XML_android]
+compile 'com.android.support:recyclerview-v7:25.1.0'
+\end{lstlisting}
+
+\section{Create a layout with RecyclerView}
+
+\begin{lstlisting}[%
+language=XML_android]
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<android.support.v7.widget.RecyclerView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:id="@+id/recyclerview_forecast"/>
+
+	<TextView
+		android:id="@+id/tv_weather_data"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:padding="16dp"
+		android:textSize="20sp" />
+
+	<TextView
+		android:id="@+id/tv_error_message_display"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:padding="16dp"
+		android:text="@string/error_message"
+		android:textSize="20sp"
+		android:visibility="invisible" />
+
+	<ProgressBar
+		android:id="@+id/pb_loading_indicator"
+		android:layout_height="42dp"
+		android:layout_width="42dp"
+		android:layout_gravity="center"
+		android:visibility="invisible" />
+
+</FrameLayout>
+\end{lstlisting}
+
+\section{Create item Layout}
+Create a generic Layout for items that will be storaged in the RecyclerView
+
+Example:
+
+\begin{lstlisting}[%
+language=XML_android]
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical">
+
+<TextView
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:id="@+id/tv_weather_data"
+android:textSize="22sp"
+android:padding="16dp"/>
+
+<View
+android:layout_width="match_parent"
+android:layout_height="1dp"
+android:background="#dadada"
+android:layout_marginLeft="8dp"
+android:layout_marginRight="8dp">
+
+</View>
+
+</LinearLayout>
+\end{lstlisting}
+
+\section{Create the adapter}
+
+\begin{enumerate}
+	\item Create a class for the adapter.
+	\item Extend it to extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapterViewHolder>.
+	\item Create an array where you will storage the data for each item.
+	\item Create an empty constructor.
+	\item Create a class inside your class which extends RecyclerView.ViewHolder.
+	\item Inside your RecyclerView.ViewHolder class create the variables for your TextView or whatever you have in your RecyclerView Layout.
+	\item Inside your RecyclerView.ViewHolder class create a constructor with View as a parameter.
+	\item Inside your RecyclerView.ViewHolder class constructor get the references of your RecyclerView Layout TextViews.
+	\item Inside your adapter class override onCreateViewHolder and inflate your RecyclerView Layout into a view.
+	\item Return ForecastAdapterViewHolder with the inflated view.
+	\item Override onBindViewHolder and set the text of the TextView.
+	\item Override getItemCount and return 0 if the array which we created in the beginning is null or the length if not.
+	\item create a method to set data in your array.
+\end{enumerate}
+
+\begin{lstlisting}[language=Java]
+/*
+* Copyright (C) 2016 The Android Open Source Project
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+package com.example.android.sunshine;
+
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+/**
+* {@link ForecastAdapter} exposes a list of weather forecasts to a
+* {@link android.support.v7.widget.RecyclerView}
+*/
+public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapterViewHolder> {
+
+	private String[] mWeatherData;
+	
+	public ForecastAdapter() {
+		
+	}
+	
+	/**
+	* Cache of the children views for a forecast list item.
+	*/
+	public class ForecastAdapterViewHolder extends RecyclerView.ViewHolder {
+		
+		// Within ForecastAdapterViewHolder ///////////////////////////////////////////////////////
+		public final TextView mWeatherTextView;
+		
+		public ForecastAdapterViewHolder(View view) {
+			super(view);
+			mWeatherTextView = (TextView) view.findViewById(R.id.tv_weather_data);
+		}
+		// Within ForecastAdapterViewHolder ///////////////////////////////////////////////////////
+	}
+	
+	/**
+	* This gets called when each new ViewHolder is created. This happens when the RecyclerView
+	* is laid out. Enough ViewHolders will be created to fill the screen and allow for scrolling.
+	*
+	* @param viewGroup The ViewGroup that these ViewHolders are contained within.
+	* @param viewType  If your RecyclerView has more than one type of item (which ours doesn't) you
+	*                  can use this viewType integer to provide a different layout. See
+	*                  {@link android.support.v7.widget.RecyclerView.Adapter#getItemViewType(int)}
+	*                  for more details.
+	* @return A new ForecastAdapterViewHolder that holds the View for each list item
+	*/
+	@Override
+	public ForecastAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+		Context context = viewGroup.getContext();
+		int layoutIdForListItem = R.layout.forecast_list_item;
+		LayoutInflater inflater = LayoutInflater.from(context);
+		boolean shouldAttachToParentImmediately = false;
+		
+		View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately);
+		return new ForecastAdapterViewHolder(view);
+	}
+	
+	/**
+	* OnBindViewHolder is called by the RecyclerView to display the data at the specified
+	* position. In this method, we update the contents of the ViewHolder to display the weather
+	* details for this particular position, using the "position" argument that is conveniently
+	* passed into us.
+	*
+	* @param forecastAdapterViewHolder The ViewHolder which should be updated to represent the
+	*                                  contents of the item at the given position in the data set.
+	* @param position                  The position of the item within the adapter's data set.
+	*/
+	@Override
+	public void onBindViewHolder(ForecastAdapterViewHolder forecastAdapterViewHolder, int position) {
+		String weatherForThisDay = mWeatherData[position];
+		forecastAdapterViewHolder.mWeatherTextView.setText(weatherForThisDay);
+	}
+	
+	/**
+	* This method simply returns the number of items to display. It is used behind the scenes
+	* to help layout our Views and for animations.
+	*
+	* @return The number of items available in our forecast
+	*/
+	@Override
+	public int getItemCount() {
+		if (null == mWeatherData) return 0;
+		return mWeatherData.length;
+	}
+	
+	/**
+	* This method is used to set the weather forecast on a ForecastAdapter if we've already
+	* created one. This is handy when we get new data from the web but don't want to create a
+	* new ForecastAdapter to display it.
+	*
+	* @param weatherData The new weather data to be displayed.
+	*/
+	public void setWeatherData(String[] weatherData) {
+		mWeatherData = weatherData;
+		notifyDataSetChanged();
+	}
+}
+
+\end{lstlisting}
+
+
+
+\section{Edit your MainActivity}
+
+\begin{enumerate}
+	\item Add a RecyclerView variable.
+	\item Add your new class adapter variable.
+	\item Get a reference from your RecyclerView in the variable.
+	\item Create a LinearLayoutManager and set context, oritentation and shouldReverseLayout.
+	\item Set your LinearLayoutManager in your RecyclerView
+	\item set setHasFixedSize in your RecyclerView if you want to keep all the components with the same size.
+	\item Initialize your new class adapter variable.
+	\item Use setAdapter to set your adapter to you RecyclerView.
+	\item Set the data to your adapter.
+	
+\end{enumerate}
+
+Example:
+
+\begin{lstlisting}[language=Java]
+
+/*
+* Copyright (C) 2016 The Android Open Source Project
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+package com.example.android.sunshine;
+
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import com.example.android.sunshine.data.SunshinePreferences;
+import com.example.android.sunshine.utilities.NetworkUtils;
+import com.example.android.sunshine.utilities.OpenWeatherJsonUtils;
+
+import java.net.URL;
+
+public class MainActivity extends AppCompatActivity {
+	
+	private RecyclerView mRecyclerView;
+	
+	private ForecastAdapter mForecastAdapter;
+	
+	private TextView mErrorMessageDisplay;
+	
+	private ProgressBar mLoadingIndicator;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_forecast);
+		
+
+		/*
+		* Using findViewById, we get a reference to our RecyclerView from xml. This allows us to
+		* do things like set the adapter of the RecyclerView and toggle the visibility.
+		*/
+		mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_forecast);
+		
+		/* This TextView is used to display errors and will be hidden if there are no errors */
+		mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
+		
+		/*
+		* LinearLayoutManager can support HORIZONTAL or VERTICAL orientations. The reverse layout
+		* parameter is useful mostly for HORIZONTAL layouts that should reverse for right to left
+		* languages.
+		*/
+		LinearLayoutManager layoutManager
+		= new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+		
+		mRecyclerView.setLayoutManager(layoutManager);
+		
+		/*
+		* Use this setting to improve performance if you know that changes in content do not
+		* change the child layout size in the RecyclerView
+		*/
+		mRecyclerView.setHasFixedSize(true);
+		
+		/*
+		* The ForecastAdapter is responsible for linking our weather data with the Views that
+		* will end up displaying our weather data.
+		*/
+		mForecastAdapter = new ForecastAdapter();
+
+		/* Setting the adapter attaches it to the RecyclerView in our layout. */
+		mRecyclerView.setAdapter(mForecastAdapter);
+		
+		/*
+		* The ProgressBar that will indicate to the user that we are loading data. It will be
+		* hidden when no data is loading.
+		*
+		* Please note: This so called "ProgressBar" isn't a bar by default. It is more of a
+		* circle. We didn't make the rules (or the names of Views), we just follow them.
+		*/
+		mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
+		
+		/* Once all of our views are setup, we can load the weather data. */
+		loadWeatherData();
+	}
+	
+	/**
+	* This method will get the user's preferred location for weather, and then tell some
+	* background method to get the weather data in the background.
+	*/
+	private void loadWeatherData() {
+		showWeatherDataView();
+		
+		String location = SunshinePreferences.getPreferredWeatherLocation(this);
+		new FetchWeatherTask().execute(location);
+	}
+	
+	/**
+	* This method will make the View for the weather data visible and
+	* hide the error message.
+	* <p>
+	* Since it is okay to redundantly set the visibility of a View, we don't
+	* need to check whether each view is currently visible or invisible.
+	*/
+	private void showWeatherDataView() {
+		/* First, make sure the error is invisible */
+		mErrorMessageDisplay.setVisibility(View.INVISIBLE);
+
+		/* Then, make sure the weather data is visible */
+		mRecyclerView.setVisibility(View.VISIBLE);
+	}
+	
+	/**
+	* This method will make the error message visible and hide the weather
+	* View.
+	* <p>
+	* Since it is okay to redundantly set the visibility of a View, we don't
+	* need to check whether each view is currently visible or invisible.
+	*/
+	private void showErrorMessage() {
+		/* First, hide the currently visible data */
+		mRecyclerView.setVisibility(View.INVISIBLE);
+		/* Then, show the error */
+		mErrorMessageDisplay.setVisibility(View.VISIBLE);
+	}
+	
+	public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			mLoadingIndicator.setVisibility(View.VISIBLE);
+		}
+		
+		@Override
+		protected String[] doInBackground(String... params) {
+			
+			/* If there's no zip code, there's nothing to look up. */
+			if (params.length == 0) {
+				return null;
+			}
+			
+			String location = params[0];
+			URL weatherRequestUrl = NetworkUtils.buildUrl(location);
+			
+			try {
+				String jsonWeatherResponse = NetworkUtils
+				.getResponseFromHttpUrl(weatherRequestUrl);
+				
+				String[] simpleJsonWeatherData = OpenWeatherJsonUtils
+				.getSimpleWeatherStringsFromJson(MainActivity.this, jsonWeatherResponse);
+				
+				return simpleJsonWeatherData;
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(String[] weatherData) {
+			mLoadingIndicator.setVisibility(View.INVISIBLE);
+			if (weatherData != null) {
+				showWeatherDataView();
+				// COMPLETED (45) Instead of iterating through every string, use mForecastAdapter.setWeatherData and pass in the weather data
+				mForecastAdapter.setWeatherData(weatherData);
+			} else {
+				showErrorMessage();
+			}
+		}
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		/* Use AppCompatActivity's method getMenuInflater to get a handle on the menu inflater */
+		MenuInflater inflater = getMenuInflater();
+		/* Use the inflater's inflate method to inflate our menu layout to this menu */
+		inflater.inflate(R.menu.forecast, menu);
+		/* Return true so that the menu is displayed in the Toolbar */
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		
+		if (id == R.id.action_refresh) {
+			mForecastAdapter.setWeatherData(null);
+			loadWeatherData();
+			return true;
+		}
+		
+		return super.onOptionsItemSelected(item);
+	}
+}
+\end{lstlisting}
+\href{https://developer.android.com/reference/android/support/v7/widget/RecyclerView.html}{RecyclerView Resource}
+
+\end{document}
