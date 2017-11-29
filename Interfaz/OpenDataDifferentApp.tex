@@ -1,0 +1,186 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Simple Sectioned Essay Template
+% LaTeX Template
+%
+% This template has been downloaded from:
+% http://www.latextemplates.com
+%
+% Note:
+% The \lipsum[#] commands throughout this template generate dummy text
+% to fill the template out. These commands should all be removed when 
+% writing essay content.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[12pt]{article} % Default font size is 12pt, it can be changed here
+
+\usepackage{geometry} % Required to change the page size to A4
+\geometry{a4paper} % Set the page size to be A4 as opposed to the default US Letter
+
+\usepackage{graphicx} % Required for including pictures
+
+\usepackage{float} % Allows putting an [H] in \begin{figure} to specify the exact location of the figure
+\usepackage{wrapfig} % Allows in-line images such as the example fish picture
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+\usepackage{hyperref}
+
+
+\linespread{1.2} % Line spacing
+
+%\setlength\parindent{0pt} % Uncomment to remove all indentation from paragraphs
+
+\graphicspath{{Pictures/}} % Specifies the directory where pictures are stored
+
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+
+\definecolor{Maroon}{rgb}{0.5,0,0}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+
+\lstset{frame=tb,
+	backgroundcolor=\color[rgb]{0.9,0.9,0.9},
+	language=Java,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	% Line numbers
+	xleftmargin={0.75cm},
+	numbers=left,
+	stepnumber=1,
+	firstnumber=1,
+	numberfirstline=true,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
+
+
+\lstdefinelanguage{XML_android}
+{
+	alsoletter=-,
+	basicstyle=\ttfamily\footnotesize,
+	morestring=[b]",
+	moredelim=*[s][\color{Maroon}]{<}{\ },
+	moredelim=[s][\color{Maroon}]{</}{>},
+	moredelim=[l][\color{Maroon}]{/>},
+	moredelim=[l][\color{Maroon}]{>},
+	morecomment=[s]{<?}{?>},
+	morecomment=[s]{<!--}{-->},
+	morecomment=[s]{<!}{>},
+	commentstyle=\color{darkgreen},
+	stringstyle=\color{blue},
+	identifierstyle=\color{red}
+}
+
+
+
+
+\begin{document}
+	
+	%----------------------------------------------------------------------------------------
+	%	TITLE PAGE
+	%----------------------------------------------------------------------------------------
+	
+	\begin{titlepage}
+		
+		\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+		
+		\center % Center everything on the page
+		
+		\HRule \\[0.4cm]
+		{ \huge \bfseries Open data with another APP}\\[0.4cm] % Title of your document
+		\HRule \\[1.5cm]
+		
+		\begin{minipage}{0.4\textwidth}
+		\end{minipage}\\[4cm]
+		
+		{\large \today}\\[3cm] % Date, change the \today to a set date if you want to be precise
+		
+		%\includegraphics{Logo}\\[1cm] % Include a department/university logo - this will require the graphicx package
+		
+		\vfill % Fill the rest of the page with whitespace
+		
+	\end{titlepage}
+	
+	%----------------------------------------------------------------------------------------
+	%	TABLE OF CONTENTS
+	%----------------------------------------------------------------------------------------
+	
+	\tableofcontents % Include a table of contents
+	
+	\newpage % Begins the essay on a new page instead of on the same page as the table of contents 
+	
+	%----------------------------------------------------------------------------------------
+	%	INTRODUCTION
+	%----------------------------------------------------------------------------------------
+	
+	\section{Introduction} % Major section
+	
+	How open data from your app to another app.
+	
+	%------------------------------------------------
+	
+	\section{Create the method}
+	
+	\begin{enumerate}
+		\item Create an URI to parse your data to a format that only this apps cand use it.
+		\item Create an intent with the parameters Intent(Intent.ACTION\_VIEW, yourUri).
+		\item Check if the smartphone has an app that can handle with your URI.
+		\item If yes, startActivity(intent).
+	\end{enumerate}
+	
+	\begin{lstlisting}[language=Java]
+public void onClickOpenAddressButton(View v) {
+	String addressString = "1600 Amphitheatre Parkway, CA";
+	
+	Uri.Builder builder = new Uri.Builder();
+	builder.scheme("geo")
+	.path("0,0")
+	.query(addressString);
+	Uri addressUri = builder.build();
+	
+	showMap(addressUri);
+}
+	
+private void showMap(Uri geoLocation) {
+	/** Again, we create an Intent with the action, ACTION_VIEW because we want to VIEW the
+	* contents of this Uri.
+	*/
+	Intent intent = new Intent(Intent.ACTION_VIEW);
+	
+	/*
+	* Using setData to set the Uri of this Intent has the exact same affect as passing it in
+	* the Intent's constructor. This is simply an alternate way of doing this.
+	*/
+	intent.setData(geoLocation);
+	
+	if (intent.resolveActivity(getPackageManager()) != null) {
+		startActivity(intent);
+	}
+}
+	
+	\end{lstlisting}
+	
+	\href{https://developer.android.com/reference/android/content/Intent.html}{Intent Resource} 
+	
+	\href{https://developer.android.com/reference/android/net/Uri.html}{URI Resource}
+	
+	
+\end{document}
